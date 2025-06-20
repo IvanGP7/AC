@@ -686,7 +686,7 @@ sim_reg_options(struct opt_odb_t *odb)
   
   */
    opt_reg_int_list(odb, "-bpred:yags",
-                   "2-level predictor config "
+                   "yags predictor config "
 		   "(1 <Entradas PHT X> <Longitud GBHR g> 0)",
                    yags_config, yags_nelt, &yags_nelt,
 		   /* default */yags_config,
