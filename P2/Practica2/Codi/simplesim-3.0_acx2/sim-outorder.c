@@ -981,7 +981,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
     {
       /* 2-level adaptive predictor, bpred_create() checks args */
       if (yags_nelt != 4)
-	fatal("bad 2-level pred config (<l1size> <l2size> <hist_size> <xor>)");
+	fatal("bad yags pred config (<l1size> <l2size> <hist_size> <xor>)");
       if (btb_nelt != 2)
 	fatal("bad btb config (<num_sets> <associativity>)");
 
