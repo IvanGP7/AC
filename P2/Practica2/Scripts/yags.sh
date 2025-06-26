@@ -1,67 +1,67 @@
 # Simulacions del yags
+sudo mkdir -p ../Results
+
+SIMPLESIM="../Code/simplesim-3.0_acx2/sim-outorder"
+RESULTS="../Results/yags"
+BENCH="../Benchmarks"
 
 #ammp
-cd
-cd EC/Eines/SPEC-Files/ammp/data/ref
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
+cd $BENCH/ammp/data/ref
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/ammp.exe < ammp.in
 
 
 #applu
-cd
-cd EC/Eines/SPEC-Files/applu/data/ref
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
+cd $BENCH/applu/data/ref
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/applu.exe < applu.in
 
 #eon
-cd
-cd EC/Eines/SPEC-Files/eon/data/ref
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
+cd $BENCH/eon/data/ref
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/eon.exe chair.control.cook chair.camera chair.surfaces chair.cook.ppm ppm pixels_out.cook
 
 #equake
-cd
-cd EC/Eines/SPEC-Files/equake/equake/data/ref
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
+cd $BENCH/equake/equake/data/ref
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/equake.exe < inp.in
 
 #vpr
-cd
-cd EC/Eines/SPEC-Files/vpr/data/ref
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
+cd $BENCH/vpr/data/ref
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 4 1 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 16 2 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 64 3 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 256 4 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
 
-/home/milax/AC/P2/Fitxers/simplesim-3.0_acx2/sim-outorder -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
+$SIMPLESIM -fastfwd 100000000 -max:inst 100000000 -bpred yags -bpred:yags 1 1024 5 0 -mem:width 32 -mem:lat 300 2 ../../exe/vpr.exe net.in arch.in place.out dum.out -nodisp -place_only -init_t 5 -exit_t 0.005 -alpha_t 0.9412 -inner_num 2
