@@ -3,23 +3,23 @@
 
 -fetch:ifqsize    8
 -decode:width     8
--issue:width      8
--commit:width     8
+-issue:width      18
+-commit:width     12
 
--ruu:size         256
--lsq:size         32
+-ruu:size         576
+-lsq:size         192
 
--res:ialu 4
--res:imult 1
--res:fpalu 2
--res:fpmult 1
--res:memports 2
+-res:ialu         6
+-res:imult        3
+-res:fpalu        4
+-res:fpmult       3
 
-# L1: 256*64*4 = 64 KB
+-res:memports     4
+
 -cache:il1 il1:256:64:8:l
 -cache:dl1 dl1:256:64:8:l
 -cache:dl2 ul2:1024:64:8:l
 
 
--mem:lat          300 2
--mem:width        32
+-mem:lat          114 1
+-mem:width        18
