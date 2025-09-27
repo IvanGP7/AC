@@ -1,5 +1,0 @@
-ammp.txt:sim_IPC                      0.9052 # instructions per cycle
-applu.txt:sim_IPC                      5.0310 # instructions per cycle
-eon.txt:sim_IPC                      3.3741 # instructions per cycle
-equake.txt:sim_IPC                      3.5481 # instructions per cycle
-vpr.txt:sim_IPC                      1.9758 # instructions per cycle
