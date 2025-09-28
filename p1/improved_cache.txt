@@ -1,0 +1,26 @@
+-fastfwd 100000000
+-max:inst 100000000
+
+-fetch:ifqsize    8
+-decode:width     8
+-issue:width      18
+-commit:width     12
+
+-ruu:size         512 #potencia de 2
+-lsq:size         256 #potencia de 2
+
+-res:ialu         6
+-res:imult        3
+-res:fpalu        4
+-res:fpmult       3
+
+-res:memport      4
+
+-cache:il1 il1:64:64:16:l   #asociatividad potencia de 2
+-cache:dl1 dl1:64:64:16:l
+-cache:dl2 ul2:4096:64:16:l
+
+
+
+-mem:lat          114 1
+-mem:width        16    #potencia de 2
