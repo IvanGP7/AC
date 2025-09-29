@@ -6,7 +6,7 @@
 -issue:width      18
 -commit:width     12
 
--ruu:size         512 #potencia de 2
+-ruu:size         1024 #(512) potencia de 2
 -lsq:size         256 #potencia de 2
 
 -res:ialu         6
@@ -23,4 +23,4 @@
 
 
 -mem:lat          114 1
--mem:width        16    #potencia de 2
+-mem:width        32    #(16) potencia de 2
