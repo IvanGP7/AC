@@ -1,7 +1,7 @@
 -fastfwd 100000000
 -max:inst 100000000
 
--fetch:ifqsize    8 #(8)
+-fetch:ifqsize    16 #(8)
 -decode:width     16 #(8)
 -issue:width      18
 -commit:width     12
