@@ -1,12 +1,12 @@
 -fastfwd 100000000
 -max:inst 100000000
 
--fetch:ifqsize    8
--decode:width     8
+-fetch:ifqsize    8 #(8)
+-decode:width     16 #(8)
 -issue:width      18
 -commit:width     12
 
--ruu:size         1024 #(512) potencia de 2
+-ruu:size         512 #(512) potencia de 2
 -lsq:size         256 #potencia de 2
 
 -res:ialu         6
@@ -23,4 +23,4 @@
 
 
 -mem:lat          114 1
--mem:width        32    #(16) potencia de 2
+-mem:width        16    #(16) potencia de 2
