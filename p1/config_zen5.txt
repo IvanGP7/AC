@@ -1,10 +1,10 @@
 -fastfwd 100000000
 -max:inst 100000000
 
--fetch:ifqsize    16
--decode:width     10
--issue:width      10
--commit:width     10
+-fetch:ifqsize    8
+-decode:width     8
+-issue:width      8
+-commit:width     8
 
 -ruu:size         512 #potencia de 2
 -lsq:size         256 #potencia de 2
