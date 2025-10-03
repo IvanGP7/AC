@@ -1,0 +1,6 @@
+
+applu.txt: sim_IPC                      4.1532 # instructions per cycle
+art.txt: sim_IPC                      2.1058 # instructions per cycle
+gzip.txt: sim_IPC                      2.6875 # instructions per cycle
+mesa.txt: sim_IPC                      4.0710 # instructions per cycle
+twolf.txt: sim_IPC                      4.5357 # instructions per cycle
