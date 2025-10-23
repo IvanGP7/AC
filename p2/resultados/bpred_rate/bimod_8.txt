@@ -1,0 +1,6 @@
+==== bimod_8 ====
+applu.txt: bpred_bimod.bpred_dir_rate    0.8429 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_bimod.bpred_dir_rate    0.9477 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_bimod.bpred_dir_rate    0.7954 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_bimod.bpred_dir_rate    0.7533 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_bimod.bpred_dir_rate    0.7508 # branch direction-prediction rate (i.e., all-hits/updates)

@@ -1,0 +1,6 @@
+==== pag_Y32_X256 ====
+applu.txt: bpred_2lev.bpred_dir_rate    0.9862 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_2lev.bpred_dir_rate    0.9460 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_2lev.bpred_dir_rate    0.8813 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_2lev.bpred_dir_rate    0.8789 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_2lev.bpred_dir_rate    0.8861 # branch direction-prediction rate (i.e., all-hits/updates)

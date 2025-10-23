@@ -1,0 +1,6 @@
+==== pag_Y8_X16 ====
+applu.txt: bpred_2lev.bpred_dir_rate    0.8945 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_2lev.bpred_dir_rate    0.9500 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_2lev.bpred_dir_rate    0.8004 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_2lev.bpred_dir_rate    0.7362 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_2lev.bpred_dir_rate    0.7275 # branch direction-prediction rate (i.e., all-hits/updates)
