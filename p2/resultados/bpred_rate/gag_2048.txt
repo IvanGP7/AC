@@ -1,0 +1,6 @@
+==== gag_2048 ====
+applu.txt: bpred_2lev.bpred_dir_rate    0.9352 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_2lev.bpred_dir_rate    0.9368 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_2lev.bpred_dir_rate    0.8536 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_2lev.bpred_dir_rate    0.8303 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_2lev.bpred_dir_rate    0.8356 # branch direction-prediction rate (i.e., all-hits/updates)

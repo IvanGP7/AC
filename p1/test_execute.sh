@@ -53,7 +53,3 @@ for f in "$OUTPUT"/*.txt; do
         echo "$(basename "$f"): $line" | tee -a "$OUTFILE"
     fi
 done
-
-
-
-

@@ -8,7 +8,7 @@ of SimpleScalar, LLC (info@simplescalar.com).
 warning: section `.comment' ignored...
 sim: command line: ../files/sim/simplesim-3.0_acx2/sim-outorder -config config_lion_cove.txt -redir:sim resultados/config_lion_cove/gzip.txt ../files/benchmarks/gzip/exe/gzip.exe ../files/benchmarks/gzip/data/ref/input.source 60 ../files/benchmarks/gzip/data/ref/input.log 60 ../files/benchmarks/gzip/data/ref/input.graphic 60 ../files/benchmarks/gzip/data/ref/input.random 60 ../files/benchmarks/gzip/data/ref/input.program 60 
 
-sim: simulation started @ Sat Sep 27 22:06:53 2025, options follow:
+sim: simulation started @ Sun Sep 28 15:51:49 2025, options follow:
 
 sim-outorder: This simulator implements a very detailed out-of-order issue
 superscalar processor with a two-level memory system and speculative
@@ -138,8 +138,8 @@ sim_num_refs               28276177 # total number of loads and stores committed
 sim_num_loads              19412905 # total number of loads committed
 sim_num_stores         8863272.0000 # total number of stores committed
 sim_num_branches           12768669 # total number of branches committed
-sim_elapsed_time                 39 # total simulation time in seconds
-sim_inst_rate          2564102.6410 # simulation speed (in insts/sec)
+sim_elapsed_time                 20 # total simulation time in seconds
+sim_inst_rate          5000000.1500 # simulation speed (in insts/sec)
 sim_total_insn            165758282 # total number of instructions executed
 sim_total_refs             44237296 # total number of loads and stores executed
 sim_total_loads            31572397 # total number of loads executed
@@ -251,6 +251,6 @@ ld_target_big_endian              0 # target executable endian-ness, non-zero if
 mem.page_count                15459 # total number of pages allocated
 mem.page_mem                123672k # total size of memory pages allocated
 mem.ptab_misses             7513569 # total first level page table misses
-mem.ptab_accesses        1386837600 # total page table accesses
+mem.ptab_accesses        1386837652 # total page table accesses
 mem.ptab_miss_rate           0.0054 # first level page table miss rate
 

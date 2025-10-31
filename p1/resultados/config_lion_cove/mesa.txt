@@ -8,7 +8,7 @@ of SimpleScalar, LLC (info@simplescalar.com).
 warning: section `.comment' ignored...
 sim: command line: ../files/sim/simplesim-3.0_acx2/sim-outorder -config config_lion_cove.txt -redir:sim resultados/config_lion_cove/mesa.txt ../files/benchmarks/mesa/exe/mesa.exe -frames 1000 -meshfile ../files/benchmarks/mesa/data/ref/mesa.in -ppmfile ../files/benchmarks/mesa/data/ref/mesa.ppm 
 
-sim: simulation started @ Sat Sep 27 22:07:32 2025, options follow:
+sim: simulation started @ Sun Sep 28 15:52:09 2025, options follow:
 
 sim-outorder: This simulator implements a very detailed out-of-order issue
 superscalar processor with a two-level memory system and speculative
@@ -138,8 +138,8 @@ sim_num_refs               35029419 # total number of loads and stores committed
 sim_num_loads              27416309 # total number of loads committed
 sim_num_stores         7613110.0000 # total number of stores committed
 sim_num_branches           16455684 # total number of branches committed
-sim_elapsed_time                 32 # total simulation time in seconds
-sim_inst_rate          3125000.0000 # simulation speed (in insts/sec)
+sim_elapsed_time                 17 # total simulation time in seconds
+sim_inst_rate          5882352.9412 # simulation speed (in insts/sec)
 sim_total_insn            124538881 # total number of instructions executed
 sim_total_refs             42053865 # total number of loads and stores executed
 sim_total_loads            32960056 # total number of loads executed
@@ -251,6 +251,6 @@ ld_target_big_endian              0 # target executable endian-ness, non-zero if
 mem.page_count                  305 # total number of pages allocated
 mem.page_mem                  2440k # total size of memory pages allocated
 mem.ptab_misses              287694 # total first level page table misses
-mem.ptab_accesses        1496107308 # total page table accesses
+mem.ptab_accesses        1496107360 # total page table accesses
 mem.ptab_miss_rate           0.0002 # first level page table miss rate
 

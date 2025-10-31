@@ -1,0 +1,5 @@
+-fastfwd 100000000
+-max:inst 100000000
+
+-mem:lat          300 2
+-mem:width        32    #potencia de 2
