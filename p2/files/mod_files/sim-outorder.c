@@ -123,6 +123,12 @@ static int twolev_nelt = 4;
 static int twolev_config[4] =
   { /* l1size */1, /* l2size */1024, /* hist */8, /* xor */FALSE};
 
+/* Alloy predictor config (<l1size> <l2size> <p> <g> <0>) */
+static int alloy_nelt = 5;
+/* Puedes poner aquí una config por defecto válida, por ejemplo: */
+static int alloy_config[5] =
+  { /* l1size */8, /* l2size */8, /* p */1, /* g */1, /* reservado */0 };
+
 /* combining predictor config (<meta_table_size> */
 static int comb_nelt = 1;
 static int comb_config[1] =
@@ -650,7 +656,7 @@ sim_reg_options(struct opt_odb_t *odb)
                );
 
   opt_reg_string(odb, "-bpred",
-		 "branch predictor type {nottaken|taken|perfect|bimod|2lev|comb}",
+		 "branch predictor type {nottaken|taken|perfect|bimod|2lev|comb|alloy}",
                  &pred_type, /* default */"bimod",
                  /* print */TRUE, /* format */NULL);
 
@@ -665,6 +671,12 @@ sim_reg_options(struct opt_odb_t *odb)
 		   "(<l1size> <l2size> <hist_size> <xor>)",
                    twolev_config, twolev_nelt, &twolev_nelt,
 		   /* default */twolev_config,
+                   /* print */TRUE, /* format */NULL, /* !accrue */FALSE);
+
+  opt_reg_int_list(odb, "-bpred:alloy",
+                   "Alloy predictor config (<l1size> <l2size> <p> <g> <0>)",
+                   alloy_config, alloy_nelt, &alloy_nelt,
+                   /* default */alloy_config,
                    /* print */TRUE, /* format */NULL, /* !accrue */FALSE);
 
   opt_reg_int_list(odb, "-bpred:comb",
@@ -952,6 +964,53 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
 			  /* btb assoc */btb_config[1],
 			  /* ret-addr stack size */ras_size);
     }
+    else if (!mystricmp(pred_type, "alloy"))
+      {
+        /* Alloy predictor, validamos parámetros */
+        if (alloy_nelt != 5)
+          fatal("bad alloy pred config (<l1size> <l2size> <p> <g> <0>)");
+        if (btb_nelt != 2)
+          fatal("bad btb config (<num_sets> <associativity>)");
+
+        unsigned int l1 = alloy_config[0]; /* PaBHT entries */
+        unsigned int l2 = alloy_config[1]; /* PHT entries */
+        int p = alloy_config[2];
+        int g = alloy_config[3];
+
+        /* Comprobar potencias de 2 y coherencia con c = log2(l2) */
+        int c = -1;
+        unsigned int tmp = l2;
+        while (tmp) { c++; tmp >>= 1; }
+        if ((1u << c) != l2)
+          fatal("Alloy: l2size must be a power of two");
+
+        int i = c - g - p;
+        if (i < 1)
+          fatal("Alloy: i = c - g - p must be >= 1");
+
+        if ((l1 & (l1 - 1)) != 0)
+          fatal("Alloy: l1size must be a power of two");
+
+        /* Creamos el predictor Alloy.
+        * Reutilizamos los parámetros del prototipo:
+        *  - l1size = PaBHT entries
+        *  - l2size = PHT entries
+        *  - meta_size = p (bits PaBHT)
+        *  - shift_width = g (bits GBHR)
+        *  - xor = 0 (no usado en Alloy)
+        */
+        pred = bpred_create(BPredAlloy,
+          /* bimod_size */0,
+          /* l1size */l1,
+          /* l2size */l2,
+          /* meta_size (p) */p,
+          /* shift_width (g) */g,
+          /* xor */0,
+          /* btb sets */btb_config[0],
+          /* btb assoc */btb_config[1],
+          /* ret-addr stack size */ras_size);
+      }
+
   else if (!mystricmp(pred_type, "comb"))
     {
       /* combining predictor, bpred_create() checks args */

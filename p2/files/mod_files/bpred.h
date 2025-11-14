@@ -104,6 +104,7 @@ enum bpred_class {
   BPred2bit,			/* 2-bit saturating cntr pred (dir mapped) */
   BPredTaken,			/* static predict taken */
   BPredNotTaken,		/* static predict not taken */
+  BPredAlloy,
   BPred_NUM
 };
 
@@ -130,6 +131,16 @@ struct bpred_dir_t {
       int xor;			/* history xor address flag */
       int *shiftregs;		/* level-1 history table */
       unsigned char *l2table;	/* level-2 prediction state table */
+
+      /* Campos adicionales para Alloy */
+      int alloy_gbits;      /* g: bits de GBHR */
+      int alloy_pbits;      /* p: bits por entrada en PaBHT */
+      int alloy_cbits;      /* c: bits de índice del PHT (log2(l2size)) */
+      int alloy_ibits;      /* i: bits de PC usados en el índice */
+
+      unsigned int alloy_gbhr;       /* registro GBHR (usa solo alloy_gbits bits) */
+      unsigned int *alloy_pabht;     /* tabla PaBHT (l1size entradas, cada una p bits válidos) */
+      unsigned char *alloy_pht;      /* tabla PHT (l2size entradas, contador de 2 bits) */
     } two;
   } config;
 };

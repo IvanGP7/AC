@@ -98,6 +98,16 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
 
     break;
 
+  case BPredAlloy:
+    /* l1size = PaBHT entries, l2size = PHT entries
+     * shift_width = g, meta_size = p (pasado antes)
+     * 'xor' no se usa para Alloy
+     */
+    pred->dirpred.twolev =
+      bpred_dir_create(BPredAlloy, l1size, l2size, shift_width, meta_size);
+    break;
+
+
   case BPred2Level:
     pred->dirpred.twolev = 
       bpred_dir_create(class, l1size, l2size, shift_width, xor);
@@ -229,6 +239,68 @@ bpred_dir_create (
 	  pred_dir->config.two.l2table[cnt] = flipflop;
 	  flipflop = 3 - flipflop;
 	}
+
+      break;
+    }
+
+  case BPredAlloy:
+    {
+      /* l1size = PaBHT entries, l2size = PHT entries
+       * shift_width = g, xor = p (reutilizado)
+       */
+      int g = shift_width;
+      int p = xor;
+
+      if (!l1size || (l1size & (l1size - 1)) != 0)
+        fatal("Alloy: l1size must be non-zero and a power of two");
+      if (!l2size || (l2size & (l2size - 1)) != 0)
+        fatal("Alloy: l2size must be non-zero and a power of two");
+      if (g <= 0 || g > 30)
+        fatal("Alloy: g must be in 1..30");
+      if (p <= 0 || p > 16)
+        fatal("Alloy: p must be positive and reasonably small");
+
+      /* Calculamos c = log2(l2size) e i = c - g - p */
+      int c = -1;
+      unsigned int tmp = l2size;
+      while (tmp) { c++; tmp >>= 1; }
+      int i = c - g - p;
+      if (i < 1)
+        fatal("Alloy: i = c - g - p must be >= 1");
+
+      pred_dir->config.two.l1size = l1size;
+      pred_dir->config.two.l2size = l2size;
+
+      pred_dir->config.two.alloy_gbits = g;
+      pred_dir->config.two.alloy_pbits = p;
+      pred_dir->config.two.alloy_cbits = c;
+      pred_dir->config.two.alloy_ibits = i;
+
+      /* Inicializamos GBHR con todos los bits a 1 en los g bits menos significativos */
+      if (g >= 31)
+        pred_dir->config.two.alloy_gbhr = 0xFFFFFFFFu;
+      else
+        pred_dir->config.two.alloy_gbhr = (1u << g) - 1u;
+
+      /* PaBHT: l1size entradas, cada una con p bits de historia */
+      pred_dir->config.two.alloy_pabht =
+        calloc(l1size, sizeof(unsigned int));
+      if (!pred_dir->config.two.alloy_pabht)
+        fatal("cannot allocate Alloy PaBHT");
+
+      /* Inicializamos cada entrada a todos '1' en los p bits */
+      unsigned int init_phist = (p >= 31) ? 0xFFFFFFFFu : ((1u << p) - 1u);
+      for (unsigned int e = 0; e < (unsigned int)l1size; e++)
+        pred_dir->config.two.alloy_pabht[e] = init_phist;
+
+      /* PHT: tabla de 2-bit counters, inicializados a 3 (11b) => fuertemente taken */
+      pred_dir->config.two.alloy_pht =
+        calloc(l2size, sizeof(unsigned char));
+      if (!pred_dir->config.two.alloy_pht)
+        fatal("cannot allocate Alloy PHT");
+
+      for (unsigned int e = 0; e < (unsigned int)l2size; e++)
+        pred_dir->config.two.alloy_pht[e] = 3;
 
       break;
     }
@@ -530,6 +602,44 @@ bpred_dir_lookup(struct bpred_dir_t *pred_dir,	/* branch dir predictor inst */
         p = &pred_dir->config.two.l2table[l2index];
       }
       break;
+    case BPredAlloy:
+      {
+        /* Obtenemos parámetros */
+        int g = pred_dir->config.two.alloy_gbits;
+        int p = pred_dir->config.two.alloy_pbits;
+        int c = pred_dir->config.two.alloy_cbits;
+        int i = pred_dir->config.two.alloy_ibits;
+        unsigned int gbhr = pred_dir->config.two.alloy_gbhr;
+
+        unsigned int l1size = pred_dir->config.two.l1size;
+        unsigned int l2size = pred_dir->config.two.l2size;
+
+        /* Índice para PaBHT: k bits menos significativos del PC */
+        int k = 0;
+        unsigned int tmp = l1size;
+        while (tmp > 1) { k++; tmp >>= 1; }
+        unsigned int pc_index = (unsigned int)(baddr >> MD_BR_SHIFT);
+        unsigned int pabht_idx = pc_index & (l1size - 1);
+        unsigned int phist = pred_dir->config.two.alloy_pabht[pabht_idx] & ((1u << p) - 1u);
+
+        /* i bits del PC para completar el índice */
+        unsigned int pc_i_mask = (1u << i) - 1u;
+        unsigned int pc_i = pc_index & pc_i_mask;
+
+        /* g bits del GBHR */
+        unsigned int gmask = (g >= 31) ? 0xFFFFFFFFu : ((1u << g) - 1u);
+        unsigned int ghist = gbhr & gmask;
+
+        /* Construimos índice: [ghist | phist | pc_i] */
+        unsigned int idx = (ghist << (p + i)) | (phist << i) | pc_i;
+
+        /* Nos aseguramos de que no nos salimos de rango */
+        idx &= (l2size - 1);
+
+        p = &pred_dir->config.two.alloy_pht[idx];
+      }
+      break;
+
     case BPred2bit:
       p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
       break;
@@ -579,6 +689,7 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
   dir_update_ptr->pmeta = NULL;
   /* Except for jumps, get a pointer to direction-prediction bits */
   switch (pred->class) {
+
     case BPredComb:
       if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
 	{
@@ -608,6 +719,13 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 	  dir_update_ptr->pdir1 =
 	    bpred_dir_lookup (pred->dirpred.twolev, baddr);
 	}
+      break;
+    case BPredAlloy:
+      if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+        {
+          dir_update_ptr->pdir1 =
+            bpred_dir_lookup(pred->dirpred.twolev, baddr);
+        }
       break;
     case BPred2bit:
       if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
