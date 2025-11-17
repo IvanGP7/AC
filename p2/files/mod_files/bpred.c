@@ -247,7 +247,7 @@ bpred_dir_create (
   case BPredAlloy:
     {
         int g = shift_width;   // g bits de GBHR
-        int p = meta_size;     // p bits de PaBHT (NO usar xor)
+        int p = xor;     // p bits de PaBHT (NO usar xor)
 
         pred_dir->class = BPredAlloy;
 
@@ -745,12 +745,49 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 	}
       break;
     case BPredAlloy:
-      if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
-        {
-          dir_update_ptr->pdir1 =
-            bpred_dir_lookup(pred->dirpred.twolev, baddr);
-        }
-      break;
+    {
+        struct bpred_dir_t *dir = pred->dirpred.twolev;
+
+        unsigned int g = dir->config.two.alloy_gbits;
+        unsigned int p = dir->config.two.alloy_pbits;
+        unsigned int i = dir->config.two.alloy_ibits;
+        unsigned int c = dir->config.two.alloy_cbits;
+
+        unsigned int l1size = dir->config.two.l1size;
+        unsigned int l2size = dir->config.two.l2size;
+
+        /* 1. Índices */
+        unsigned int pabht_index = (baddr >> 2) & (l1size - 1);
+        unsigned int p_hist = dir->config.two.alloy_pabht[pabht_index];
+
+        unsigned int g_hist = dir->config.two.alloy_gbhr & ((1u << g) - 1);
+
+        unsigned int pc_i = (baddr >> 2) & ((1u << i) - 1);
+
+        /* 2. Índice completo */
+        unsigned int index =
+              (pc_i  << (g + p))
+            | (g_hist << p)
+            | (p_hist);
+
+        index &= (l2size - 1);
+
+        /* 3. Acceder a PHT */
+        unsigned char *pht = dir->config.two.alloy_pht;
+        unsigned char *counter = &pht[index];
+
+        /* Guardar el puntero para la actualización */
+        dir_update_ptr->pdir1 = (char *)counter;
+
+        /* 4. Predicción */
+        int pred_taken = (*counter >= 2);
+
+        if (pred_taken)
+            return btarget;
+        else
+            return (baddr + sizeof(md_inst_t));
+    }
+
     case BPred2bit:
       if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
 	{
