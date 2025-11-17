@@ -350,6 +350,19 @@ bpred_dir_config(
       pred_dir->config.two.xor ? "" : "no", pred_dir->config.two.l2size);
     break;
 
+  case BPredAlloy:
+    fprintf(stream,
+      "pred_dir: %s: alloy: l1-sz=%d, l2-sz=%d, g=%d, p=%d, c=%d, i=%d\n",
+      name,
+      pred_dir->config.two.l1size,
+      pred_dir->config.two.l2size,
+      pred_dir->config.two.alloy_gbits,
+      pred_dir->config.two.alloy_pbits,
+      pred_dir->config.two.alloy_cbits,
+      pred_dir->config.two.alloy_ibits);
+    break;
+
+
   case BPred2bit:
     fprintf(stream, "pred_dir: %s: 2-bit: %d entries, direct-mapped\n",
       name, pred_dir->config.bimod.size);
@@ -382,6 +395,14 @@ bpred_config(struct bpred_t *pred,	/* branch predictor instance */
 	    pred->btb.sets, pred->btb.assoc);
     fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
     break;
+
+  case BPredAlloy:
+    bpred_dir_config(pred->dirpred.twolev, "alloy", stream);
+    fprintf(stream, "btb: %d sets x %d associativity",
+            pred->btb.sets, pred->btb.assoc);
+    fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
+    break;
+
 
   case BPred2Level:
     bpred_dir_config (pred->dirpred.twolev, "2lev", stream);
@@ -433,6 +454,11 @@ bpred_reg_stats(struct bpred_t *pred,	/* branch predictor instance */
     case BPredComb:
       name = "bpred_comb";
       break;
+
+    case BPredAlloy:
+      name = "bpred_alloy";
+      break;
+
     case BPred2Level:
       name = "bpred_2lev";
       break;
@@ -958,6 +984,37 @@ bpred_update(struct bpred_t *pred,	/* branch predictor instance */
 	shift_reg & ((1 << pred->dirpred.twolev->config.two.shift_width) - 1);
     }
 
+  /* ------------------------------------------------------------------ */
+  /*  ALLOY: actualizar GBHR y PaBHT (historiales)                      */
+  /* ------------------------------------------------------------------ */
+  if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND) &&
+      pred->class == BPredAlloy)
+    {
+      struct bpred_dir_t *d = pred->dirpred.twolev;
+      int g = d->config.two.alloy_gbits;
+      int p = d->config.two.alloy_pbits;
+
+      /* máscaras para limitar a g y p bits */
+      unsigned int gmask = (g >= 31) ? 0xFFFFFFFFu : ((1u << g) - 1u);
+      unsigned int pmask = (p >= 31) ? 0xFFFFFFFFu : ((1u << p) - 1u);
+
+      /* actualizar GBHR: desplazar e insertar el bit taken */
+      d->config.two.alloy_gbhr =
+        ((d->config.two.alloy_gbhr << 1) | (taken ? 1u : 0u)) & gmask;
+
+      /* actualizar PaBHT: índice por PC, igual que en lookup */
+      {
+        unsigned int l1size   = d->config.two.l1size;  /* 2^k entradas */
+        unsigned int pc_index = (unsigned int)(baddr >> MD_BR_SHIFT);
+        unsigned int pabht_idx = pc_index & (l1size - 1);
+
+        unsigned int h = d->config.two.alloy_pabht[pabht_idx] & pmask;
+        h = ((h << 1) | (taken ? 1u : 0u)) & pmask;
+        d->config.two.alloy_pabht[pabht_idx] = h;
+      }
+    }
+  /* ------------------------------------------------------------------ */
+
   /* find BTB entry if it's a taken branch (don't allocate for non-taken) */
   if (taken)
     {
@@ -1101,3 +1158,4 @@ bpred_update(struct bpred_t *pred,	/* branch predictor instance */
 	}
     }
 }
+
