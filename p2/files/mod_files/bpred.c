@@ -131,6 +131,7 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
   switch (class) {
   case BPredComb:
   case BPred2Level:
+  case BPredAlloy:
   case BPred2bit:
     {
       int i;
