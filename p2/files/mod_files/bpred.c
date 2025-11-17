@@ -751,18 +751,21 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
         unsigned int g = dir->config.two.alloy_gbits;
         unsigned int p = dir->config.two.alloy_pbits;
         unsigned int i = dir->config.two.alloy_ibits;
-        unsigned int c = dir->config.two.alloy_cbits;
 
         unsigned int l1size = dir->config.two.l1size;
         unsigned int l2size = dir->config.two.l2size;
 
+        unsigned int pc = (baddr >> MD_BR_SHIFT);
+
         /* 1. Índices */
-        unsigned int pabht_index = (baddr >> 2) & (l1size - 1);
+        unsigned int pabht_index = pc & (l1size - 1);
+
         unsigned int p_hist = dir->config.two.alloy_pabht[pabht_index];
+        p_hist &= ((1u << p) - 1);
 
         unsigned int g_hist = dir->config.two.alloy_gbhr & ((1u << g) - 1);
 
-        unsigned int pc_i = (baddr >> 2) & ((1u << i) - 1);
+        unsigned int pc_i = pc & ((1u << i) - 1);
 
         /* 2. Índice completo */
         unsigned int index =
@@ -772,20 +775,14 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 
         index &= (l2size - 1);
 
-        /* 3. Acceder a PHT */
         unsigned char *pht = dir->config.two.alloy_pht;
         unsigned char *counter = &pht[index];
 
-        /* Guardar el puntero para la actualización */
         dir_update_ptr->pdir1 = (char *)counter;
 
-        /* 4. Predicción */
         int pred_taken = (*counter >= 2);
 
-        if (pred_taken)
-            return btarget;
-        else
-            return (baddr + sizeof(md_inst_t));
+        return pred_taken ? btarget : (baddr + sizeof(md_inst_t));
     }
 
     case BPred2bit:
@@ -1040,8 +1037,8 @@ bpred_update(struct bpred_t *pred,	/* branch predictor instance */
       /* actualizar PaBHT: índice por PC, igual que en lookup */
       {
         unsigned int l1size   = d->config.two.l1size;  /* 2^k entradas */
-        unsigned int pc_index = (unsigned int)(baddr >> MD_BR_SHIFT);
-        unsigned int pabht_idx = pc_index & (l1size - 1);
+        unsigned int pc = (baddr >> MD_BR_SHIFT);
+        unsigned int pabht_idx = pc & (l1size - 1);
 
         unsigned int h = d->config.two.alloy_pabht[pabht_idx] & pmask;
         h = ((h << 1) | (taken ? 1u : 0u)) & pmask;
