@@ -1,0 +1,6 @@
+==== alloy_Y8_X8_p1_g1 ====
+applu.txt: bpred_alloy.bpred_dir_rate    0.8399 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_alloy.bpred_dir_rate    0.9265 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_alloy.bpred_dir_rate    0.7709 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_alloy.bpred_dir_rate    0.7133 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_alloy.bpred_dir_rate    0.7018 # branch direction-prediction rate (i.e., all-hits/updates)

@@ -1,0 +1,2 @@
+==== alloy_test ====
+applu_alloy: bpred_alloy.bpred_dir_rate    0.8399 # branch direction-prediction rate (i.e., all-hits/updates)

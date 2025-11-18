@@ -11,8 +11,8 @@ if [ "$#" -ne 1 ]; then
 fi
 
 CONFIG="$1"
-PATH_SIM="./files/sim/simplesim-3.0_acx2"
-PATH_BCH="./files/benchmarks"
+PATH_SIM="../files/sim/simplesim-3.0_acx2"
+PATH_BCH="../files/benchmarks"
 
 BASE_OUT="resultados"
 SIM_OUT_DIR="resultados/bpred_rate"
