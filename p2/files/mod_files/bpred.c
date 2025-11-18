@@ -289,7 +289,7 @@ bpred_dir_create (
 
         /* Inicializamos PHT a 1 (débilmente no tomado) */
         for (unsigned int e = 0; e < (unsigned int)l2size; e++)
-            pred_dir->config.two.alloy_pht[e] = 1;
+            pred_dir->config.two.alloy_pht[e] = 2;
 
         break;
     }
