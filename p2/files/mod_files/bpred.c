@@ -251,15 +251,6 @@ bpred_dir_create (
 
         pred_dir->class = BPredAlloy;
 
-        if (!l1size || (l1size & (l1size - 1)) != 0)
-            fatal("Alloy: l1size must be non-zero and a power of two");
-        if (!l2size || (l2size & (l2size - 1)) != 0)
-            fatal("Alloy: l2size must be non-zero and a power of two");
-        if (g <= 0)
-            fatal("Alloy: g must be positive");
-        if (p <= 0)
-            fatal("Alloy: p must be positive");
-
         /* Calcular c = log2(l2size), i = c - g - p */
         int c = 0;
         unsigned int tmp = l2size;
@@ -278,7 +269,7 @@ bpred_dir_create (
         pred_dir->config.two.alloy_ibits = i;
 
         /* GBHR inicia en 0 */
-        pred_dir->config.two.alloy_gbhr = 0;
+        pred_dir->config.two.alloy_gbhr = 1;
 
         /* PaBHT */
         pred_dir->config.two.alloy_pabht =
@@ -288,7 +279,7 @@ bpred_dir_create (
 
         /* Inicializamos PaBHT a 0 (historial vacío) */
         for (unsigned int e = 0; e < (unsigned int)l1size; e++)
-            pred_dir->config.two.alloy_pabht[e] = 0;
+            pred_dir->config.two.alloy_pabht[e] = 1;
 
         /* PHT: 2-bit counters */
         pred_dir->config.two.alloy_pht =

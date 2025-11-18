@@ -991,13 +991,11 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
         if ((l1 & (l1 - 1)) != 0)
           fatal("Alloy: l1size must be a power of two");
 
-        /* Creamos el predictor Alloy.
-        * Reutilizamos los parámetros del prototipo:
+        /* Creamos el predictor Alloy.:
         *  - l1size = PaBHT entries
         *  - l2size = PHT entries
         *  - meta_size = p (bits PaBHT)
         *  - shift_width = g (bits GBHR)
-        *  - xor = 0 (no usado en Alloy)
         */
         pred = bpred_create(BPredAlloy,
           /* bimod_size */0,
