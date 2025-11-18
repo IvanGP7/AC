@@ -748,33 +748,29 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 
         unsigned int pc = (baddr >> MD_BR_SHIFT);
 
-        /* 1. Índices */
+        // 1. Índices
         unsigned int pabht_index = pc & (l1size - 1);
-
-        unsigned int p_hist = dir->config.two.alloy_pabht[pabht_index];
-        p_hist &= ((1u << p) - 1);
-
+        unsigned int p_hist = dir->config.two.alloy_pabht[pabht_index] & ((1u << p) - 1);
         unsigned int g_hist = dir->config.two.alloy_gbhr & ((1u << g) - 1);
-
         unsigned int pc_i = pc & ((1u << i) - 1);
 
-        /* 2. Índice completo */
+        // 2. Index de la PHT
         unsigned int index =
-              (pc_i  << (g + p))
-            | (g_hist << p)
-            | (p_hist);
+              (pc_i  << (p + g))
+            | (p_hist << g)
+            | (g_hist);
 
         index &= (l2size - 1);
 
-        unsigned char *pht = dir->config.two.alloy_pht;
-        unsigned char *counter = &pht[index];
+        // 3. Obtener puntero al contador
+        unsigned char *counter = &dir->config.two.alloy_pht[index];
 
+        // 4. Guardar puntero para actualización
         dir_update_ptr->pdir1 = (char *)counter;
 
-        int pred_taken = (*counter >= 2);
+        break;  // ← MUY IMPORTANTE
+      }
 
-        return pred_taken ? btarget : (baddr + sizeof(md_inst_t));
-    }
 
     case BPred2bit:
       if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))

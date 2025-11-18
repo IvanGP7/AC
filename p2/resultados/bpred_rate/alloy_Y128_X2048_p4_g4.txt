@@ -1,0 +1,6 @@
+==== alloy_Y128_X2048_p4_g4 ====
+applu.txt: bpred_alloy.bpred_dir_rate    0.9888 # branch direction-prediction rate (i.e., all-hits/updates)
+art.txt: bpred_alloy.bpred_dir_rate    0.9663 # branch direction-prediction rate (i.e., all-hits/updates)
+gzip.txt: bpred_alloy.bpred_dir_rate    0.9053 # branch direction-prediction rate (i.e., all-hits/updates)
+mesa.txt: bpred_alloy.bpred_dir_rate    0.9655 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt: bpred_alloy.bpred_dir_rate    0.9551 # branch direction-prediction rate (i.e., all-hits/updates)
