@@ -627,10 +627,10 @@ bpred_dir_lookup(struct bpred_dir_t *pred_dir,	/* branch dir predictor inst */
         unsigned int l1size = pred_dir->config.two.l1size; /* PaBHT entries */
         unsigned int l2size = pred_dir->config.two.l2size; /* PHT entries */
 
-        /* PC normalizado (como en el resto de predictores) */
+        /* PC normalizado */
         unsigned int pc = (unsigned int)(baddr >> MD_BR_SHIFT);
 
-        /* 1) Índice a PaBHT: k bits menos significativos del PC */
+        /* Índice a PaBHT: k bits menos significativos del PC */
         unsigned int pabht_index = pc & (l1size - 1);
 
         /* Historial privado p de esa entrada */
@@ -644,7 +644,7 @@ bpred_dir_lookup(struct bpred_dir_t *pred_dir,	/* branch dir predictor inst */
         /* i bits del PC */
         unsigned int pc_i = pc & ((1u << ibits) - 1u);
 
-        /* 2) Índice de la PHT: [pc_i][p_hist][g_hist] */
+        /* Índice de la PHT: [pc_i][p_hist][g_hist] */
         unsigned int index =
               (pc_i   << (pbits + g))
             | (p_hist << g)
