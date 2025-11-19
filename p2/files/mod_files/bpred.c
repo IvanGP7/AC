@@ -619,41 +619,45 @@ bpred_dir_lookup(struct bpred_dir_t *pred_dir,	/* branch dir predictor inst */
       break;
     case BPredAlloy:
       {
-        /* Obtenemos parámetros */
-        int g = pred_dir->config.two.alloy_gbits;
-        int p = pred_dir->config.two.alloy_pbits;
-        int c = pred_dir->config.two.alloy_cbits;
-        int i = pred_dir->config.two.alloy_ibits;
-        unsigned int gbhr = pred_dir->config.two.alloy_gbhr;
+        /* Parámetros Alloy */
+        unsigned int g      = pred_dir->config.two.alloy_gbits;
+        unsigned int pbits  = pred_dir->config.two.alloy_pbits;
+        unsigned int ibits  = pred_dir->config.two.alloy_ibits;
 
-        unsigned int l1size = pred_dir->config.two.l1size;
-        unsigned int l2size = pred_dir->config.two.l2size;
+        unsigned int l1size = pred_dir->config.two.l1size; /* PaBHT entries */
+        unsigned int l2size = pred_dir->config.two.l2size; /* PHT entries */
 
-        /* Índice para PaBHT: k bits menos significativos del PC */
-        int k = 0;
-        unsigned int tmp = l1size;
-        while (tmp > 1) { k++; tmp >>= 1; }
-        unsigned int pc_index = (unsigned int)(baddr >> MD_BR_SHIFT);
-        unsigned int pabht_idx = pc_index & (l1size - 1);
-        unsigned int phist = pred_dir->config.two.alloy_pabht[pabht_idx] & ((1u << p) - 1u);
+        /* PC normalizado (como en el resto de predictores) */
+        unsigned int pc = (unsigned int)(baddr >> MD_BR_SHIFT);
 
-        /* i bits del PC para completar el índice */
-        unsigned int pc_i_mask = (1u << i) - 1u;
-        unsigned int pc_i = pc_index & pc_i_mask;
+        /* 1) Índice a PaBHT: k bits menos significativos del PC */
+        unsigned int pabht_index = pc & (l1size - 1);
 
-        /* g bits del GBHR */
-        unsigned int gmask = (g >= 31) ? 0xFFFFFFFFu : ((1u << g) - 1u);
-        unsigned int ghist = gbhr & gmask;
+        /* Historial privado p de esa entrada */
+        unsigned int p_hist =
+          pred_dir->config.two.alloy_pabht[pabht_index] & ((1u << pbits) - 1u);
 
-        /* Construimos índice: [ghist | phist | pc_i] */
-        unsigned int idx = (ghist << (p + i)) | (phist << i) | pc_i;
+        /* Historial global g (GBHR) */
+        unsigned int g_hist =
+          pred_dir->config.two.alloy_gbhr & ((1u << g) - 1u);
 
-        /* Nos aseguramos de que no nos salimos de rango */
-        idx &= (l2size - 1);
+        /* i bits del PC */
+        unsigned int pc_i = pc & ((1u << ibits) - 1u);
 
-        p = &pred_dir->config.two.alloy_pht[idx];
+        /* 2) Índice de la PHT: [pc_i][p_hist][g_hist] */
+        unsigned int index =
+              (pc_i   << (pbits + g))
+            | (p_hist << g)
+            |  g_hist;
+
+        /* Aseguramos que no nos salimos de rango */
+        index &= (l2size - 1);
+
+        /* 3) Puntero al contador de 2 bits en la PHT */
+        p = &pred_dir->config.two.alloy_pht[index];
       }
       break;
+
 
     case BPred2bit:
       p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
@@ -736,40 +740,12 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 	}
       break;
     case BPredAlloy:
-    {
-        struct bpred_dir_t *dir = pred->dirpred.twolev;
-
-        unsigned int g = dir->config.two.alloy_gbits;
-        unsigned int p = dir->config.two.alloy_pbits;
-        unsigned int i = dir->config.two.alloy_ibits;
-
-        unsigned int l1size = dir->config.two.l1size;
-        unsigned int l2size = dir->config.two.l2size;
-
-        unsigned int pc = (baddr >> MD_BR_SHIFT);
-
-        // 1. Índices
-        unsigned int pabht_index = pc & (l1size - 1);
-        unsigned int p_hist = dir->config.two.alloy_pabht[pabht_index] & ((1u << p) - 1);
-        unsigned int g_hist = dir->config.two.alloy_gbhr & ((1u << g) - 1);
-        unsigned int pc_i = pc & ((1u << i) - 1);
-
-        // 2. Index de la PHT
-        unsigned int index =
-              (pc_i  << (p + g))
-            | (p_hist << g)
-            | (g_hist);
-
-        index &= (l2size - 1);
-
-        // 3. Obtener puntero al contador
-        unsigned char *counter = &dir->config.two.alloy_pht[index];
-
-        // 4. Guardar puntero para actualización
-        dir_update_ptr->pdir1 = (char *)counter;
-
-        break;  // ← MUY IMPORTANTE
-      }
+      if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+  {
+    dir_update_ptr->pdir1 =
+      bpred_dir_lookup(pred->dirpred.twolev, baddr);
+  }
+  break;
 
 
     case BPred2bit:
